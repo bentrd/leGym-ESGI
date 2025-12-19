@@ -1,0 +1,6 @@
+ignoredBuiltDependencies:
+  - bcrypt
+  - esbuild
+
+onlyBuiltDependencies:
+  - "@prisma/client"

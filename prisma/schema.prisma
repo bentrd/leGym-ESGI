@@ -1,0 +1,233 @@
+datasource db {
+  provider  = "postgresql"
+  url       = env("STORAGE_PRISMA_DATABASE_URL")
+  directUrl = env("STORAGE_POSTGRES_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id            String   @id @default(cuid())
+  name          String
+  email         String   @unique
+  emailVerified Boolean  @default(false)
+  image         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions Session[]
+  accounts Account[]
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid())
+  expiresAt DateTime
+  token     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid())
+  accountId             String
+  providerId            String
+  userId                String
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid())
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model UserProfile {
+  id              Int       @id @default(autoincrement())
+  authUserId      String    @unique
+  email           String?   @unique
+  displayName     String?
+  role            String    @default("CLIENT")
+  bio             String?
+  city            String?
+  showTopGyms     Boolean   @default(true)
+  showBadges      Boolean   @default(true)
+  lastBadgeSyncAt DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  gyms          Gym[]              @relation("OwnerGyms")
+  challenges    Challenge[]        @relation("CreatorChallenges")
+  sessions      ChallengeSession[]
+  badges        UserBadge[]
+  ownerRequests GymOwnerRequest[]
+}
+
+model Gym {
+  id               Int      @id @default(autoincrement())
+  name             String
+  slug             String   @unique
+  city             String
+  address          String
+  postcode         String?
+  latitude         Float?
+  longitude        Float?
+  contactEmail     String?
+  contactPhone     String?
+  description      String?
+  equipmentSummary String?
+  activities       String?
+  status           String   @default("INCOMPLETE")
+  ownerId          Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  owner      UserProfile @relation("OwnerGyms", fields: [ownerId], references: [id])
+  challenges Challenge[]
+
+  @@index([ownerId])
+}
+
+model ExerciseType {
+  id              Int      @id @default(autoincrement())
+  name            String   @unique
+  description     String?
+  targetedMuscles String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Challenge {
+  id                   Int      @id @default(autoincrement())
+  title                String
+  description          String?
+  goals                String?
+  difficulty           String   @default("MEDIUM")
+  duration             Int?
+  recommendedExercises String?
+  relatedEquipment     String?
+  gymId                Int?
+  creatorId            Int
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  gym      Gym?               @relation(fields: [gymId], references: [id])
+  creator  UserProfile        @relation("CreatorChallenges", fields: [creatorId], references: [id])
+  sessions ChallengeSession[]
+
+  @@index([creatorId])
+  @@index([gymId])
+}
+
+model ChallengeSession {
+  id          Int       @id @default(autoincrement())
+  challengeId Int
+  userId      Int
+  status      String    @default("NOT_STARTED")
+  score       Int?
+  completedAt DateTime?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  challenge Challenge    @relation(fields: [challengeId], references: [id])
+  user      UserProfile  @relation(fields: [userId], references: [id])
+  logs      WorkoutLog[]
+
+  @@unique([challengeId, userId])
+  @@index([userId])
+}
+
+model WorkoutLog {
+  id                 Int      @id @default(autoincrement())
+  challengeSessionId Int
+  date               DateTime @default(now())
+  duration           Int?
+  calories           Int?
+  notes              String?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  challengeSession ChallengeSession @relation(fields: [challengeSessionId], references: [id], onDelete: Cascade)
+
+  @@index([challengeSessionId])
+}
+
+model Badge {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  icon      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  rewardRule RewardRule?
+  awards     UserBadge[]
+}
+
+model RewardRule {
+  id        Int      @id @default(autoincrement())
+  badgeId   Int      @unique
+  name      String
+  criteria  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  badge Badge @relation(fields: [badgeId], references: [id])
+}
+
+model UserBadge {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  badgeId   Int
+  awardedAt DateTime @default(now())
+  reason    String?
+
+  user  UserProfile @relation(fields: [userId], references: [id])
+  badge Badge       @relation(fields: [badgeId], references: [id])
+
+  @@unique([userId, badgeId])
+  @@index([badgeId])
+}
+
+model GymOwnerRequest {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  gymName   String
+  notes     String?
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user UserProfile @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}

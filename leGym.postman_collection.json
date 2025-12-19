@@ -1,0 +1,852 @@
+{
+  "info": {
+    "_postman_id": "496f1e6f-e683-427e-b5f5-2dffe030693d",
+    "name": "leGym",
+    "description": "API collection for leGym project - aligned with syllabus requirements",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "50890485",
+    "_collection_link": "https://bentrd-784446.postman.co/workspace/Benjamin-Tordjman's-Workspace~e1cfcb2f-ba0b-4316-813a-bda96db847b8/collection/50890485-496f1e6f-e683-427e-b5f5-2dffe030693d?action=share&source=collection_link&creator=50890485"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login Client",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const baseUrl = pm.environment.get('baseUrl');",
+                  "",
+                  "if (baseUrl) {",
+                  "    const url = new URL(baseUrl);",
+                  "    const domain = url.origin;",
+                  "    ",
+                  "    const jar = pm.cookies.jar();",
+                  "    ",
+                  "    jar.clear(domain, (error) => {",
+                  "        if (error) {",
+                  "            console.log('Error clearing cookies:', error);",
+                  "        } else {",
+                  "            console.log('Session cookies cleared for domain:', domain);",
+                  "        }",
+                  "    });",
+                  "} else {",
+                  "    console.log('baseUrl not found in environment variables');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{clientEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/sign-in/email",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "sign-in", "email"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Owner",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const baseUrl = pm.environment.get('baseUrl');",
+                  "",
+                  "if (baseUrl) {",
+                  "    const url = new URL(baseUrl);",
+                  "    const domain = url.origin;",
+                  "    ",
+                  "    const jar = pm.cookies.jar();",
+                  "    ",
+                  "    jar.clear(domain, (error) => {",
+                  "        if (error) {",
+                  "            console.log('Error clearing cookies:', error);",
+                  "        } else {",
+                  "            console.log('Session cookies cleared for domain:', domain);",
+                  "        }",
+                  "    });",
+                  "} else {",
+                  "    console.log('baseUrl not found in environment variables');",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{ownerEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/sign-in/email",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "sign-in", "email"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Admin",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "const baseUrl = pm.environment.get('baseUrl');",
+                  "",
+                  "if (baseUrl) {",
+                  "    const url = new URL(baseUrl);",
+                  "    const domain = url.origin;",
+                  "    ",
+                  "    const jar = pm.cookies.jar();",
+                  "    ",
+                  "    jar.clear(domain, (error) => {",
+                  "        if (error) {",
+                  "            console.log('Error clearing cookies:', error);",
+                  "        } else {",
+                  "            console.log('Session cookies cleared for domain:', domain);",
+                  "        }",
+                  "    });",
+                  "} else {",
+                  "    console.log('baseUrl not found in environment variables');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"{{adminEmail}}\",\n  \"password\": \"{{password}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/sign-in/email",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "auth", "sign-in", "email"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Who Am I",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user/me",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user", "me"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin (logged in)",
+      "item": [
+        {
+          "name": "Users",
+          "item": [
+            {
+              "name": "Get Users",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/users",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "users"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update User",
+              "request": {
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"role\": \"CLIENT\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/users/{{userProfileId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "users", "{{userProfileId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete User",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/users/{{userProfileId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "users", "{{userProfileId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Sync User Badges",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/users/{{userProfileId}}/badges/sync",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "users", "{{userProfileId}}", "badges", "sync"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Exercise Types",
+          "item": [
+            {
+              "name": "Get Exercise Types",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/exercise-types",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "exercise-types"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Exercise Type",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Pompes\",\n    \"description\": \"Exercice de musculation pour le haut du corps\",\n    \"targetedMuscles\": \"Pectoraux, Triceps, Épaules\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/exercise-types",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "exercise-types"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Edit Exercise Type",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"description\": \"Exercice modifié\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/exercise-types/{{exerciseTypeId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "exercise-types", "{{exerciseTypeId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Exercise Type",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/exercise-types/{{exerciseTypeId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "exercise-types", "{{exerciseTypeId}}"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Badges",
+          "item": [
+            {
+              "name": "Get Badges",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/badges",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "badges"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Badge",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Débutant\",\n    \"icon\": \"🏃\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/badges",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "badges"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Badge",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Supernova\",\n    \"icon\": \"🌟\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/badges/{{badgeId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "badges", "{{badgeId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Badge",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/badges/{{badgeId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "badges", "{{badgeId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Add Rule To Badge",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"10 séances\",\n    \"criteria\": \"{\\\"name\\\":\\\"10 séances\\\",\\\"field\\\":\\\"totalSessions\\\",\\\"operator\\\":\\\">=\\\",\\\"value\\\":10}\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/badges/{{badgeId}}/rule",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "badges", "{{badgeId}}", "rule"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Sync All Users Badges",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"batchSize\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/badges/sync-all",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "badges", "sync-all"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Gyms",
+          "item": [
+            {
+              "name": "List Pending Gyms",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/gyms",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "gyms"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Approve Gym",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"status\": \"APPROVED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/gyms/{{gymId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "gyms", "{{gymId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Reject Gym",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"status\": \"REJECTED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/gyms/{{gymId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "gyms", "{{gymId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Update Gym (Admin)",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"name\": \"Ma Salle Modifiée\",\n    \"address\": \"15 rue de Lyon\",\n    \"city\": \"Paris\",\n    \"postcode\": \"75012\",\n    \"contactEmail\": \"contact@masalle.fr\",\n    \"contactPhone\": \"+33 1 23 45 67 89\",\n    \"description\": \"Une superbe salle de sport avec équipements modernes\",\n    \"equipmentSummary\": \"Barres, Haltères, Machines Technogym, Sauna\",\n    \"activities\": \"Musculation, Cardio, CrossFit, Yoga\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/admin/gyms/{{gymId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "admin", "gyms", "{{gymId}}"]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Owner (logged in)",
+      "item": [
+        {
+          "name": "Get My Gym",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/owner/gym",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "owner", "gym"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create/Update My Gym",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"name\": \"Ma Salle De Sport\",\n    \"address\": \"10 rue de Paris\",\n    \"contactEmail\": \"owner1@legym.fr\",\n    \"description\": \"Description de la salle\",\n    \"equipmentSummary\": \"Barres, Haltères, Machines\",\n    \"activities\": \"Musculation, Cardio, CrossFit\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/owner/gym",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "owner", "gym"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete My Gym",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"gymId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/owner/gym",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "owner", "gym"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Challenge for Gym",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"Défi CrossFit\",\n    \"difficulty\": \"HARD\",\n    \"description\": \"Défi spécifique à notre salle\",\n    \"duration\": 30,\n    \"gymId\": 1\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/challenges",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "challenges"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Client (logged in)",
+      "item": [
+        {
+          "name": "Challenges",
+          "item": [
+            {
+              "name": "List Challenges",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Challenge Detail",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges/{{challengeId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges", "{{challengeId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Create Challenge",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"title\": \"Défi 7 jours\",\n    \"difficulty\": \"EASY\",\n    \"description\": \"Challenge d'introduction au fitness\",\n    \"duration\": 7\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Join Challenge",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges/{{challengeId}}/join",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges", "{{challengeId}}", "join"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get Challenge Session",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges/{{challengeId}}/sessions",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges", "{{challengeId}}", "sessions"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Mark Challenge Completed",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"status\": \"COMPLETED\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges/{{challengeId}}/sessions",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges", "{{challengeId}}", "sessions"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Workout",
+          "item": [
+            {
+              "name": "Log Workout",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"duration\": 45,\n    \"calories\": 300,\n    \"notes\": \"Séance d'entraînement intense\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges/{{challengeId}}/sessions/logs",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges", "{{challengeId}}", "sessions", "logs"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Edit Workout",
+              "request": {
+                "method": "PATCH",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"duration\": 50,\n    \"calories\": 350,\n    \"notes\": \"Séance modifiée\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges/{{challengeId}}/sessions/logs/{{logId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges", "{{challengeId}}", "sessions", "logs", "{{logId}}"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Delete Workout",
+              "request": {
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/challenges/{{challengeId}}/sessions/logs/{{logId}}",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "challenges", "{{challengeId}}", "sessions", "logs", "{{logId}}"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Badges",
+          "item": [
+            {
+              "name": "Sync Badges",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n    \"force\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseUrl}}/api/badges/sync",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "badges", "sync"]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "Get My Badges",
+              "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseUrl}}/api/badges/my",
+                  "host": ["{{baseUrl}}"],
+                  "path": ["api", "badges", "my"]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Leaderboard",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/leaderboard",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "leaderboard"]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
